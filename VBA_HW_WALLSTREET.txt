@@ -1,0 +1,84 @@
+Sub Ticker()
+
+'Loop through all sheets
+    Dim ws As Worksheet
+    Dim TotalVolume As Double
+
+    For Each ws In Worksheets
+    
+'Determine the Last Row
+   
+    LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+    
+    
+    pRowTickerSymbol = ""
+    priceChange = 0
+    tickeropenprice = 0
+    tickercloseprice = 0
+    TotalVolume = 0
+    tickerrow = 2
+    openPrice = 3
+    closePrice = 5
+    tickerSymbolcol = 1
+    ticker_symbol = ""
+    Volume = 7
+    n_ticker_name = 10
+    n_diff_Ticker = 11
+    n_volume = 12
+    Cells(1, n_ticker_name) = "Ticker"
+    Cells(1, n_diff_Ticker) = "Difference"
+    Cells(1, n_volume) = "Volume"
+    'Create a loop for stock ticker
+    For i = 2 To LastRow
+    
+        If (i = 2) Then
+            tickeropenprice = Cells(i, openPrice)
+        End If
+        
+        ticker_symbol = Cells(i, tickerSymbolcol)
+          
+            
+        If (pRowTickerSymbol <> ticker_symbol And i > 2) Then
+            tickercloseprice = Cells(i - 1, closePrice)
+            Cells(tickerrow, n_ticker_name) = pRowTickerSymbol
+            Cells(tickerrow, n_diff_Ticker) = tickercloseprice - tickeropenprice
+            Cells(tickerrow, n_volume) = TotalVolume
+            diff = tickercloseprice - tickeropenprice
+            If diff = 0 Or tickeropenprice = 0 Then
+                Cells(tickerrow, 13) = 0
+            Else
+                ratio = diff / tickeropenprice
+                Cells(tickerrow, 13) = ratio * 100
+            End If
+           
+            tickeropenprice = Cells(i, openPrice)
+            
+            'Set the Cell Colors to Red
+            If Cells(tickerrow, 11).Value < 0 Then
+                Cells(tickerrow, 11).Interior.ColorIndex = 3
+            Else
+                Cells(tickerrow, 11).Interior.ColorIndex = 4
+            End If
+            tickerrow = tickerrow + 1
+            TotalVolume = 0
+            
+
+            
+
+    'Set the Cell Colors to Green
+      ' If Range(k).Interior.ColorIndex = 4 Then Range(k).Interior.ColorIndex = 3
+           
+            
+  'Get the percent change
+  
+            
+            
+        End If
+        TotalVolume = TotalVolume + Cells(i, Volume)
+        pRowTickerSymbol = ticker_symbol
+            
+        Next i
+    Next ws
+    
+    
+End Sub
